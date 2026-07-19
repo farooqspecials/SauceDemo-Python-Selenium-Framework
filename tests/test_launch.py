@@ -1,5 +1,12 @@
-def test_launch(driver):
+from pages.login_page import LoginPage
+
+
+def test_successful_login(driver):
 
     driver.get("https://www.saucedemo.com/")
 
-    assert "Swag Labs" in driver.title
+    login_page = LoginPage(driver)
+
+    login_page.login("standard_user", "secret_sauce")
+
+    assert "inventory" in driver.current_url

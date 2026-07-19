@@ -1,38 +1,24 @@
 from selenium.webdriver.common.by import By
+from pages.base_page import BasePage
 
 
-class LoginPage:
+class LoginPage(BasePage):
 
-    # ==========================
-    # Locators
-    # ==========================
-    USERNAME_TEXTBOX = (By.ID, "user-name")
-    PASSWORD_TEXTBOX = (By.ID, "password")
+    USERNAME = (By.ID, "user-name")
+    PASSWORD = (By.ID, "password")
     LOGIN_BUTTON = (By.ID, "login-button")
 
     def __init__(self, driver):
-        """
-        Constructor receives the WebDriver instance
-        from the test.
-        """
-        self.driver = driver
-
-    # ==========================
-    # Action Methods
-    # ==========================
+        super().__init__(driver)
 
     def enter_username(self, username):
-        self.driver.find_element(*self.USERNAME_TEXTBOX).send_keys(username)
+        self.type(self.USERNAME, username)
 
     def enter_password(self, password):
-        self.driver.find_element(*self.PASSWORD_TEXTBOX).send_keys(password)
+        self.type(self.PASSWORD, password)
 
     def click_login(self):
-        self.driver.find_element(*self.LOGIN_BUTTON).click()
-
-    # ==========================
-    # Business Method
-    # ==========================
+        self.click(self.LOGIN_BUTTON)
 
     def login(self, username, password):
         self.enter_username(username)

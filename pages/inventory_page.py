@@ -5,9 +5,20 @@ from pages.base_page import BasePage
 class InventoryPage(BasePage):
 
     TITLE = (By.CLASS_NAME, "title")
+    ADD_BACKPACK = (
+    By.XPATH,
+    "//button[@id='add-to-cart-sauce-labs-backpack']"
+)
+    CART_BADGE = (By.CLASS_NAME, "shopping_cart_badge")
 
     def __init__(self, driver):
         super().__init__(driver)
 
     def get_page_title(self):
         return self.get_text(self.TITLE)
+
+    def add_backpack_to_cart(self):
+        self.click(self.ADD_BACKPACK)
+
+    def get_cart_count(self):
+        return self.get_text(self.CART_BADGE)

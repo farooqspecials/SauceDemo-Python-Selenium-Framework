@@ -21,5 +21,5 @@ def driver():
 
     yield driver
 
-    input("Press Enter to close the browser...")
+    #input("Press Enter to close the browser...")
     driver.quit()

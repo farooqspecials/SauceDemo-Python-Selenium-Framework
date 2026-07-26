@@ -9,6 +9,7 @@ class InventoryPage(BasePage):
     ADD_BACKPACK = (By.ID, "add-to-cart-sauce-labs-backpack")
     REMOVE_BACKPACK = (By.ID, "remove-sauce-labs-backpack")
     CART_BADGE = (By.CLASS_NAME, "shopping_cart_badge")
+    CART_ICON = (By.CLASS_NAME, "shopping_cart_link")
 
     def __init__(self, driver):
         super().__init__(driver)
@@ -31,3 +32,6 @@ class InventoryPage(BasePage):
             return True
         except NoSuchElementException:
             return False
+
+    def open_cart(self):
+        self.click(self.CART_ICON)

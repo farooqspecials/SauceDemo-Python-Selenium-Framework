@@ -24,3 +24,6 @@ class LoginPage(BasePage):
         self.enter_username(username)
         self.enter_password(password)
         self.click_login()
+
+    def is_login_button_displayed(self):
+        return self.driver.find_element(*self.LOGIN_BUTTON).is_displayed()

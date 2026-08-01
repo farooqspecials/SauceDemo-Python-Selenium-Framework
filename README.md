@@ -2,7 +2,7 @@
 
 A UI Test Automation Framework built using **Python**, **Selenium WebDriver**, and **Pytest**, following the **Page Object Model (POM)** design pattern.
 
-This project automates the complete purchase flow of the SauceDemo web application while demonstrating industry-standard automation framework practices.
+This project automates key user workflows of the SauceDemo web application while demonstrating industry-standard automation framework design and best practices.
 
 ---
 
@@ -13,6 +13,9 @@ This project automates the complete purchase flow of the SauceDemo web applicati
 - Pytest
 - WebDriver Manager
 - Page Object Model (POM)
+- Explicit Waits
+- JSON Test Data
+- pytest-html
 - Git & GitHub
 
 ---
@@ -21,6 +24,9 @@ This project automates the complete purchase flow of the SauceDemo web applicati
 
 ```
 SauceDemoFramework/
+│
+├── data/
+│   └── login_data.json
 │
 ├── pages/
 │   ├── base_page.py
@@ -32,17 +38,24 @@ SauceDemoFramework/
 │   └── menu_page.py
 │
 ├── tests/
+│   ├── test_login.py
+│   ├── test_login_parameterized.py
+│   ├── test_cart.py
+│   ├── test_remove_cart.py
+│   ├── test_checkout.py
+│   ├── test_logout.py
 │
-├── utilities/
-├── config/
-├── reports/
+├── utils/
+│   └── json_reader.py
+│
 ├── screenshots/
-├── logs/
-├── test_data/
+│
+├── reports/
 │
 ├── conftest.py
 ├── pytest.ini
 ├── requirements.txt
+├── report.html
 └── README.md
 ```
 
@@ -51,20 +64,25 @@ SauceDemoFramework/
 # Framework Features
 
 - Page Object Model (POM)
-- Pytest Test Runner
-- Reusable Base Page
+- Reusable BasePage
 - Shared WebDriver Fixture
-- Cross-platform execution
-- Clean project structure
-- Git version control
+- Explicit Waits
+- Data-Driven Testing using JSON
+- Parameterized Tests
+- Automatic Screenshot Capture on Test Failure
+- HTML Test Reports
+- Clean Project Structure
+- Git Version Control
 
 ---
 
-# Automated Test Scenarios
+# Implemented Test Scenarios
 
 ## Login
 
 - Successful Login
+- Data-Driven Login
+- Parameterized Login Tests
 
 ---
 
@@ -98,7 +116,98 @@ SauceDemoFramework/
 
 ## Logout
 
-- Logout Automation *(Currently Under Development)*
+- Verify Successful Logout
+
+---
+
+# Reporting
+
+## HTML Reports
+
+Generate a professional HTML report using:
+
+```bash
+python -m pytest -v --html=report.html --self-contained-html
+```
+
+Open the generated report:
+
+```
+report.html
+```
+
+The report includes:
+
+- Test Results
+- Passed Tests
+- Failed Tests
+- Execution Time
+- Test Duration
+
+---
+
+## Automatic Screenshots
+
+Whenever a test fails, a screenshot is automatically captured and stored in:
+
+```
+screenshots/
+```
+
+This makes debugging much easier.
+
+---
+
+# Data-Driven Testing
+
+Login credentials are stored inside a JSON file.
+
+Example:
+
+```json
+[
+    {
+        "username": "standard_user",
+        "password": "secret_sauce"
+    },
+    {
+        "username": "problem_user",
+        "password": "secret_sauce"
+    }
+]
+```
+
+Pytest reads the JSON file and executes the same test for every data set.
+
+---
+
+# Design Pattern
+
+This framework follows the **Page Object Model (POM)**.
+
+Each page contains:
+
+- Page Locators
+- Page Actions
+- Business Methods
+
+Example:
+
+```
+Login Page
+│
+├── Username Locator
+├── Password Locator
+├── Login Button
+└── login() Method
+```
+
+Benefits:
+
+- Better Readability
+- Code Reusability
+- Easy Maintenance
+- Reduced Code Duplication
 
 ---
 
@@ -112,6 +221,14 @@ git clone <repository-url>
 
 ---
 
+## Navigate to Project
+
+```bash
+cd SauceDemoFramework
+```
+
+---
+
 ## Create Virtual Environment
 
 ```bash
@@ -120,7 +237,7 @@ python -m venv venv
 
 ---
 
-## Activate Environment
+## Activate Virtual Environment
 
 ### Windows
 
@@ -152,7 +269,7 @@ python -m pytest -v
 
 ---
 
-## Run Single Test
+## Run a Single Test
 
 ```bash
 python -m pytest -v tests/test_login.py
@@ -160,22 +277,19 @@ python -m pytest -v tests/test_login.py
 
 ---
 
-# Design Pattern
+## Run Parameterized Tests
 
-This project follows the **Page Object Model (POM)**.
+```bash
+python -m pytest -v tests/test_login_parameterized.py
+```
 
-Each application page has its own Python class containing:
+---
 
-- Locators
-- Actions
-- Business methods
+## Generate HTML Report
 
-Benefits:
-
-- Reusable code
-- Easy maintenance
-- Better readability
-- Reduced duplication
+```bash
+python -m pytest -v --html=report.html --self-contained-html
+```
 
 ---
 
@@ -192,30 +306,30 @@ Benefits:
 - Cart Page
 - Checkout Page
 - Checkout Overview Page
+- Menu Page
 - End-to-End Purchase Flow
+- Logout Automation
+- Explicit Waits
+- Parameterized Tests
+- JSON Data-Driven Testing
+- Screenshot on Test Failure
+- HTML Reports
 - Git Integration
+- GitHub Repository
 
 ---
 
-# Planned Features
+# Planned Improvements
 
-The following features will be added as the framework grows:
+The following features are planned for future implementation:
 
-- Logout Automation
-- Negative Login Tests
-- Parameterized Tests
-- Explicit Waits
-- Improved BasePage Utilities
-- JSON Test Data
-- Logging
-- Screenshot on Test Failure
-- HTML Reports
+- Python Logging
 - Headless Browser Execution
 - Cross-Browser Testing (Chrome & Edge)
-- GitHub Actions CI/CD
-- Parallel Test Execution
-- Allure Reports
 - Environment Configuration
+- Parallel Test Execution (pytest-xdist)
+- GitHub Actions CI/CD
+- Allure Reporting
 - Jenkins Integration
 - Docker Support
 - Selenium Grid
@@ -224,16 +338,27 @@ The following features will be added as the framework grows:
 
 # Learning Objectives
 
-This project is designed to practice:
+This project demonstrates practical experience with:
 
 - Selenium WebDriver
 - Python Automation
-- Pytest
-- Page Object Model
-- Framework Design
+- Pytest Framework
+- Page Object Model (POM)
+- Explicit Waits
+- Data-Driven Testing
+- Parameterized Testing
+- HTML Reporting
+- Screenshot Capture
+- Automation Framework Design
 - Test Automation Best Practices
 - Git & GitHub
-- Continuous Integration
+- Continuous Integration Concepts
+
+---
+
+# Future Vision
+
+The goal of this project is to evolve into a production-style Selenium Automation Framework by incorporating advanced automation practices such as CI/CD pipelines, parallel execution, cross-browser testing, Docker containers, Selenium Grid, and comprehensive reporting.
 
 ---
 
@@ -241,4 +366,10 @@ This project is designed to practice:
 
 **Farooq**
 
-Learning Test Automation using Python, Selenium, and Pytest while building a real-world automation framework.
+Aspiring QA Automation Engineer building a real-world Selenium Automation Framework using Python, Selenium WebDriver, and Pytest while following industry-standard automation practices.
+
+---
+
+# License
+
+This project is intended for learning and portfolio purposes.

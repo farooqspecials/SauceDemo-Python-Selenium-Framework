@@ -11,4 +11,4 @@ def test_successful_login(driver):
 
     login_page.login("standard_user", "secret_sauce")
 
-    assert inventory_page.get_page_title() == "Products"
+    assert inventory_page.get_page_title() == "Productsss"

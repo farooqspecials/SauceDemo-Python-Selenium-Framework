@@ -25,6 +25,17 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run Finish Order Test
+      - name: Run Flake8
         run: |
-          python -m pytest -v tests/test_finish_order.py
+          flake8 .
+
+      - name: Run Selenium Tests
+        run: |
+          mkdir -p reports
+          python -m pytest -v --html=reports/report.html --self-contained-html
+
+      - name: Upload HTML Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: HTML-Test-Report
+          path: reports/report.html

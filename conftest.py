@@ -9,8 +9,9 @@ from selenium.webdriver.firefox.service import Service as FirefoxService
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.microsoft import EdgeChromiumDriverManager
 from webdriver_manager.firefox import GeckoDriverManager
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.firefox.options import Options
+
+from selenium.webdriver.chrome.options import Options as ChromeOptions
+from selenium.webdriver.firefox.options import Options as FirefoxOptions
 
 
 def pytest_addoption(parser):
@@ -28,18 +29,33 @@ def driver(request):
     browser = request.config.getoption("--browser").lower()
 
     if browser == "chrome":
-        options = Options()
-        options.add_argument("--incognito")
-        
-        options.add_argument("--headless=new")
-        options.add_argument("--no-sandbox")
-        options.add_argument("--disable-dev-shm-usage")
-        options.add_argument("--window-size=1920,1080")
+
+        chrome_options = ChromeOptions()
+        chrome_options.add_argument("--incognito")
+        chrome_options.add_argument("--headless=new")
+        chrome_options.add_argument("--no-sandbox")
+        chrome_options.add_argument("--disable-dev-shm-usage")
+        chrome_options.add_argument("--window-size=1920,1080")
+
         driver = webdriver.Chrome(
             service=ChromeService(
                 ChromeDriverManager().install()
             ),
-             options=options
+            options=chrome_options
+        )
+
+    elif browser == "firefox":
+
+        firefox_options = FirefoxOptions()
+        firefox_options.add_argument("--headless")
+        firefox_options.add_argument("--width=1920")
+        firefox_options.add_argument("--height=1080")
+
+        driver = webdriver.Firefox(
+            service=FirefoxService(
+                GeckoDriverManager().install()
+            ),
+            options=firefox_options
         )
 
     elif browser == "edge":
@@ -50,23 +66,8 @@ def driver(request):
             )
         )
 
-    elif browser == "firefox":
-
-    
-        options = Options()
-        options.add_argument("--headless")
-
-        driver = webdriver.Firefox(
-            service=FirefoxService(
-                GeckoDriverManager().install()
-            ),
-            options=options
-        )
-
     else:
-        raise ValueError(
-            f"Unsupported browser: {browser}"
-        )
+        raise ValueError(f"Unsupported browser: {browser}")
 
     driver.maximize_window()
 

@@ -12,6 +12,7 @@ pipeline {
         stage('Verify Environment') {
             steps {
                 sh '''
+                    echo "===== Environment ====="
                     python3 --version
                     pip3 --version
                     git --version
@@ -25,6 +26,7 @@ pipeline {
                 sh '''
                     python3 -m venv venv
                     . venv/bin/activate
+
                     pip install --upgrade pip
                     pip install -r requirements.txt
                 '''
@@ -35,9 +37,63 @@ pipeline {
             steps {
                 sh '''
                     . venv/bin/activate
-                    pytest -m smoke --browser chrome
+
+                    mkdir -p reports
+
+                    pytest \
+                        --browser chrome \
+                        --html=reports/chrome-report.html \
+                        --self-contained-html
                 '''
             }
+        }
+
+        /*
+        stage('Run Firefox Tests') {
+            steps {
+                sh '''
+                    . venv/bin/activate
+
+                    pytest \
+                        --browser firefox \
+                        --html=reports/firefox-report.html \
+                        --self-contained-html
+                '''
+            }
+        }
+
+        stage('Run Edge Tests') {
+            steps {
+                sh '''
+                    . venv/bin/activate
+
+                    pytest \
+                        --browser edge \
+                        --html=reports/edge-report.html \
+                        --self-contained-html
+                '''
+            }
+        }
+        */
+
+    }
+
+    post {
+
+        always {
+
+            archiveArtifacts artifacts: 'reports/*.html', fingerprint: true
+
+            echo "Pipeline Finished"
+
+        }
+
+        success {
+            echo "All tests passed."
+        }
+
+        failure {
+            echo "Some tests failed."
         }
     }
 }

@@ -1,8 +1,24 @@
 # SauceDemo Python Selenium Automation Framework
 
-A UI Test Automation Framework built using **Python**, **Selenium WebDriver**, and **Pytest**, following the **Page Object Model (POM)** design pattern.
+A production-style UI Test Automation Framework built using **Python**, **Selenium WebDriver**, and **Pytest**, following the **Page Object Model (POM)** design pattern.
 
-This project automates key user workflows of the SauceDemo web application while demonstrating industry-standard automation framework design and best practices.
+This framework automates the core user workflows of the SauceDemo web application while demonstrating industry-standard automation practices, Continuous Integration (CI), Docker containerization, and cross-browser testing.
+
+---
+
+# Project Highlights
+
+- Selenium WebDriver with Python
+- Page Object Model (POM)
+- Data-Driven Testing using JSON
+- Parameterized Testing
+- Cross-Browser Testing (Chrome & Firefox)
+- Dockerized Test Execution
+- Jenkins CI Pipeline
+- GitHub Actions CI Pipeline
+- HTML Test Reports
+- Automatic Screenshot Capture on Test Failure
+- Clean & Scalable Framework Structure
 
 ---
 
@@ -16,13 +32,16 @@ This project automates key user workflows of the SauceDemo web application while
 - Explicit Waits
 - JSON Test Data
 - pytest-html
+- Docker
+- Jenkins
+- GitHub Actions
 - Git & GitHub
 
 ---
 
 # Project Structure
 
-```
+```text
 SauceDemoFramework/
 │
 ├── data/
@@ -38,24 +57,32 @@ SauceDemoFramework/
 │   └── menu_page.py
 │
 ├── tests/
-│   ├── test_login.py
-│   ├── test_login_parameterized.py
 │   ├── test_cart.py
-│   ├── test_remove_cart.py
+│   ├── test_cart_page.py
 │   ├── test_checkout.py
+│   ├── test_finish_order.py
+│   ├── test_launch.py
+│   ├── test_login.py
+│   ├── test_login_json.py
+│   ├── test_login_parameterized.py
 │   ├── test_logout.py
+│   └── test_remove_cart.py
 │
 ├── utils/
 │   └── json_reader.py
 │
+├── reports/
 ├── screenshots/
 │
-├── reports/
+├── .github/
+│   └── workflows/
+│       └── selenium.yml
 │
+├── Dockerfile
+├── Jenkinsfile
 ├── conftest.py
 ├── pytest.ini
 ├── requirements.txt
-├── report.html
 └── README.md
 ```
 
@@ -69,8 +96,12 @@ SauceDemoFramework/
 - Explicit Waits
 - Data-Driven Testing using JSON
 - Parameterized Tests
+- Cross-Browser Execution (Chrome & Firefox)
 - Automatic Screenshot Capture on Test Failure
 - HTML Test Reports
+- Docker Support
+- Jenkins Continuous Integration
+- GitHub Actions Continuous Integration
 - Clean Project Structure
 - Git Version Control
 
@@ -124,21 +155,14 @@ SauceDemoFramework/
 
 ## HTML Reports
 
-Generate a professional HTML report using:
+Generate an HTML report using:
 
 ```bash
-python -m pytest -v --html=report.html --self-contained-html
+pytest --html=report.html --self-contained-html
 ```
 
-Open the generated report:
+Reports include:
 
-```
-report.html
-```
-
-The report includes:
-
-- Test Results
 - Passed Tests
 - Failed Tests
 - Execution Time
@@ -148,44 +172,122 @@ The report includes:
 
 ## Automatic Screenshots
 
-Whenever a test fails, a screenshot is automatically captured and stored in:
+Whenever a test fails, a screenshot is automatically captured inside:
 
-```
+```text
 screenshots/
 ```
 
-This makes debugging much easier.
+This helps simplify debugging and failure analysis.
 
 ---
 
 # Data-Driven Testing
 
-Login credentials are stored inside a JSON file.
+Login credentials are stored in a JSON file.
 
 Example:
 
 ```json
 [
-    {
-        "username": "standard_user",
-        "password": "secret_sauce"
-    },
-    {
-        "username": "problem_user",
-        "password": "secret_sauce"
-    }
+  {
+    "username": "standard_user",
+    "password": "secret_sauce"
+  },
+  {
+    "username": "problem_user",
+    "password": "secret_sauce"
+  }
 ]
 ```
 
-Pytest reads the JSON file and executes the same test for every data set.
+The framework reads the JSON data and executes the same test for every dataset.
+
+---
+
+# Cross-Browser Testing
+
+The framework currently supports:
+
+- Google Chrome
+- Mozilla Firefox
+
+Run Chrome tests:
+
+```bash
+pytest --browser chrome
+```
+
+Run Firefox tests:
+
+```bash
+pytest --browser firefox
+```
+
+---
+
+# Continuous Integration
+
+## GitHub Actions
+
+GitHub Actions automatically performs the following on every push and pull request:
+
+- Checkout source code
+- Install Python dependencies
+- Launch headless Chrome
+- Execute the complete Pytest suite
+- Generate HTML reports
+- Upload reports as workflow artifacts
+
+This ensures the framework is continuously validated after every code change.
+
+---
+
+## Jenkins Pipeline
+
+A Jenkins Declarative Pipeline has been implemented to automate framework execution.
+
+The Jenkins pipeline performs the following steps:
+
+- Checkout source code from GitHub
+- Verify the execution environment
+- Create a Python virtual environment
+- Install project dependencies
+- Execute Selenium tests
+- Generate browser-specific HTML reports
+- Archive reports as Jenkins build artifacts
+
+Current Jenkins execution supports:
+
+- Chrome
+- Firefox
+
+Microsoft Edge support is planned as the next enhancement.
+
+---
+
+# Docker Support
+
+The framework includes a Dockerfile that creates a reusable automation environment.
+
+The Docker image installs:
+
+- Python
+- Google Chrome
+- Mozilla Firefox
+- ChromeDriver
+- GeckoDriver
+- Project dependencies
+
+This ensures consistent execution across different systems without requiring manual setup.
 
 ---
 
 # Design Pattern
 
-This framework follows the **Page Object Model (POM)**.
+This project follows the **Page Object Model (POM)**.
 
-Each page contains:
+Each page object contains:
 
 - Page Locators
 - Page Actions
@@ -193,9 +295,9 @@ Each page contains:
 
 Example:
 
-```
+```text
 Login Page
-│
+
 ├── Username Locator
 ├── Password Locator
 ├── Login Button
@@ -205,7 +307,7 @@ Login Page
 Benefits:
 
 - Better Readability
-- Code Reusability
+- Reusable Code
 - Easy Maintenance
 - Reduced Code Duplication
 
@@ -264,23 +366,23 @@ pip install -r requirements.txt
 ## Run All Tests
 
 ```bash
-python -m pytest -v
+pytest
 ```
 
 ---
 
-## Run a Single Test
+## Run Chrome Tests
 
 ```bash
-python -m pytest -v tests/test_login.py
+pytest --browser chrome
 ```
 
 ---
 
-## Run Parameterized Tests
+## Run Firefox Tests
 
 ```bash
-python -m pytest -v tests/test_login_parameterized.py
+pytest --browser firefox
 ```
 
 ---
@@ -288,7 +390,7 @@ python -m pytest -v tests/test_login_parameterized.py
 ## Generate HTML Report
 
 ```bash
-python -m pytest -v --html=report.html --self-contained-html
+pytest --html=report.html --self-contained-html
 ```
 
 ---
@@ -312,8 +414,12 @@ python -m pytest -v --html=report.html --self-contained-html
 - Explicit Waits
 - Parameterized Tests
 - JSON Data-Driven Testing
-- Screenshot on Test Failure
-- HTML Reports
+- Screenshot Capture on Test Failure
+- HTML Reporting
+- Cross-Browser Testing (Chrome & Firefox)
+- Docker Configuration
+- Jenkins CI Pipeline
+- GitHub Actions CI Pipeline
 - Git Integration
 - GitHub Repository
 
@@ -321,18 +427,14 @@ python -m pytest -v --html=report.html --self-contained-html
 
 # Planned Improvements
 
-The following features are planned for future implementation:
+The following enhancements are planned:
 
-- Python Logging
-- Headless Browser Execution
-- Cross-Browser Testing (Chrome & Edge)
-- Environment Configuration
-- Parallel Test Execution (pytest-xdist)
-- GitHub Actions CI/CD
-- Allure Reporting
-- Jenkins Integration
-- Docker Support
+- Microsoft Edge Execution
 - Selenium Grid
+- Parallel Test Execution (pytest-xdist)
+- Allure Reporting
+- Python Logging
+- Environment Configuration
 
 ---
 
@@ -347,18 +449,21 @@ This project demonstrates practical experience with:
 - Explicit Waits
 - Data-Driven Testing
 - Parameterized Testing
+- Cross-Browser Automation
 - HTML Reporting
 - Screenshot Capture
+- Docker Containerization
+- Jenkins Pipelines
+- GitHub Actions CI
 - Automation Framework Design
-- Test Automation Best Practices
 - Git & GitHub
-- Continuous Integration Concepts
+- Continuous Integration (CI)
 
 ---
 
 # Future Vision
 
-The goal of this project is to evolve into a production-style Selenium Automation Framework by incorporating advanced automation practices such as CI/CD pipelines, parallel execution, cross-browser testing, Docker containers, Selenium Grid, and comprehensive reporting.
+The goal of this project is to continue evolving into a production-ready Selenium Automation Framework by incorporating advanced automation practices such as Microsoft Edge execution, Selenium Grid, parallel execution, advanced reporting, logging, and scalable cross-browser execution.
 
 ---
 
@@ -366,10 +471,10 @@ The goal of this project is to evolve into a production-style Selenium Automatio
 
 **Farooq**
 
-Aspiring QA Automation Engineer building a real-world Selenium Automation Framework using Python, Selenium WebDriver, and Pytest while following industry-standard automation practices.
+Aspiring QA Automation Engineer passionate about building production-ready UI Automation Frameworks using Python, Selenium WebDriver, Pytest, Docker, Jenkins, and GitHub Actions while following industry-standard automation best practices.
 
 ---
 
 # License
 
-This project is intended for learning and portfolio purposes.
+This project is intended for learning, demonstration, and portfolio purposes.

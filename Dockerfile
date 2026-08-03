@@ -2,7 +2,9 @@ FROM jenkins/jenkins:lts
 
 USER root
 
-# Install Python and Git
+# -------------------------------------------------
+# Install Python, Git and utilities
+# -------------------------------------------------
 RUN apt-get update && \
     apt-get install -y \
     python3 \
@@ -15,12 +17,20 @@ RUN apt-get update && \
     gnupg \
     ca-certificates
 
+# -------------------------------------------------
 # Install Google Chrome
-RUN wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /usr/share/keyrings/google.gpg && \
-    echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google.gpg] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google.list && \
+# -------------------------------------------------
+RUN wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | \
+    gpg --dearmor -o /usr/share/keyrings/google.gpg && \
+    echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google.gpg] http://dl.google.com/linux/chrome/deb/ stable main" \
+    > /etc/apt/sources.list.d/google.list && \
     apt-get update && \
     apt-get install -y google-chrome-stable
 
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+# -------------------------------------------------
+# Install Firefox ESR
+# -------------------------------------------------
+RUN apt-get update && \
+    apt-get install -y firefox-esr
 
 USER jenkins
